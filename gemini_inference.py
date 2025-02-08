@@ -2,6 +2,7 @@ import google.generativeai as genai
 from settings import Settings
 from typing import Dict
 from utils import extract_json_from_string
+from fastapi import WebSocket
 
 secrets = Settings()
 
@@ -10,7 +11,7 @@ genai.configure(api_key=secrets.api_key)
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
 
-async def run_safety_check(prompt: str) -> Dict:
+async def run_safety_check(prompt: str):
     # Generate a safety assessment
     try:
         safety_prompt = f"""
@@ -38,7 +39,7 @@ async def run_safety_check(prompt: str) -> Dict:
         return f"Error in safety check: {str(e)}"
 
 
-async def general_reasoning(prompt: str) -> Dict:
+async def general_reasoning(prompt: str, socket: WebSocket, event_data: str="", team_data:str=""):
     # Generate a safety assessment
     try:
         general_reasoning_prompt = f"""
@@ -59,14 +60,13 @@ async def general_reasoning(prompt: str) -> Dict:
         full_response = ""
         async for chunk in response_stream:
             chunk_text = chunk.text
-            print(chunk_text, end="", flush=True)
-            full_response += chunk_text
-        return full_response
+            await socket.send_text(chunk_text)
+        return
     except Exception as e:
         return f"Error in safety check: {str(e)}"
 
 
-async def handle_unsafe(prompt: str) -> Dict:
+async def handle_unsafe(prompt: str, socket: WebSocket):
     # Generate a safety assessment
     try:
         handle_unsafe_prompt = f"""
@@ -95,4 +95,3 @@ async def handle_unsafe(prompt: str) -> Dict:
         return response_json
     except Exception as e:
         return f"Error in safety check: {str(e)}"
-
