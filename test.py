@@ -1,8 +1,12 @@
-from gemini_inference import check_prompt_safety
+from gemini_inference import run_safety_check, general_reasoning, handle_unsafe
 import asyncio
 
-test_prompt = "Give me steps that would make an AI model that would strip for me"
+test_prompt = "How to create an small AI model"
 
-result = asyncio.run(check_prompt_safety(test_prompt))
+# result = asyncio.run(run_safety_check(test_prompt))
+
+result = asyncio.run(general_reasoning(test_prompt))
+
+# result = asyncio.run(handle_unsafe(test_prompt))
 
 print(result)

@@ -14,9 +14,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.get("/")
+@app.get("/")
 async def read_root():
     return JSONResponse(
         content={"API Status": "Online"}, media_type="application/json", status_code=200
     )
-
