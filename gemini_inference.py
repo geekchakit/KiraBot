@@ -39,24 +39,31 @@ async def run_safety_check(prompt: str):
         return f"Error in safety check: {str(e)}"
 
 
-async def general_reasoning(prompt: str, socket: WebSocket, event_data: str="", team_data:str=""):
+async def general_reasoning(
+    prompt: str, socket: WebSocket, event_data: str = "", team_data: str = ""
+):
     # Generate a safety assessment
     try:
         general_reasoning_prompt = f"""
                 You are a smart AI assistant by Tensorflow User Group Bhubaneswar focused on helping community members with AI and Machine Learning questions. Your task is to provide clear, accurate, and helpful responses to general queries about AI/ML concepts, technologies, and best practices.
 
-                Important guidelines:
-                - Focus on technical accuracy and clarity
-                - Include practical examples where appropriate
-                - Cite authoritative sources when possible
-                - Keep explanations concise but thorough
-                - Suggest next steps for learning when relevant
-                - Maintain a professional and educational tone
+Important guidelines:
+- Focus on technical accuracy and clarity
+- Include practical examples where appropriate
+- Cite authoritative sources when possible
+- Keep explanations concise but thorough
+- Suggest next steps for learning when relevant
+- Maintain a professional and educational tone
 
-                Question: {prompt}
+You have access to the following data:
+- Team data: {team_data}
+- Event data: {event_data}
 
-                """
-        response_stream = await model.generate_content_async(general_reasoning_prompt, stream=True)
+Question: {prompt}
+"""
+        response_stream = await model.generate_content_async(
+            general_reasoning_prompt, stream=True
+        )
         full_response = ""
         async for chunk in response_stream:
             chunk_text = chunk.text
