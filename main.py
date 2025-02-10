@@ -64,10 +64,7 @@ async def chat(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_text()
-            logger.info(
-                f"Received message from {client_ip}: {data[:100]}..."
-            )  # Log first 100 chars
-
+            
             messages.append(
                 {
                     "role": "user",
@@ -76,11 +73,7 @@ async def chat(websocket: WebSocket):
                 }
             )
 
-            logger.info(f"Processing message from {client_ip}")
             response = await general_reasoning(data, websocket, event_data, team_data)
-            logger.info(
-                f"Sent response to {client_ip}: {response[:100]}..."
-            )  # Log first 100 chars
 
             messages.append(
                 {
@@ -93,7 +86,7 @@ async def chat(websocket: WebSocket):
     except WebSocketDisconnect:
         logger.info(f"Client {client_ip} disconnected")
         logger.info(f"Saving chat history for {client_ip} to MongoDB")
-        if len(messages)!=0:
+        if len(messages) != 0:
             mongo_client.push_data(
                 client_ip, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), messages
             )
