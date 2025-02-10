@@ -4,6 +4,7 @@ cachetools==5.5.1
 certifi==2025.1.31
 charset-normalizer==3.4.1
 click==8.1.8
+dnspython==2.7.0
 fastapi==0.115.8
 google-ai-generativelanguage==0.6.15
 google-api-core==2.24.1
@@ -24,6 +25,7 @@ pyasn1_modules==0.4.1
 pydantic==2.10.6
 pydantic-settings==2.7.1
 pydantic_core==2.27.2
+pymongo==4.11
 pyparsing==3.2.1
 python-dotenv==1.0.1
 requests==2.32.3
@@ -35,3 +37,4 @@ typing_extensions==4.12.2
 uritemplate==4.1.1
 urllib3==2.3.0
 uvicorn==0.34.0
+websockets==14.2

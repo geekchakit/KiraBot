@@ -61,7 +61,8 @@ async def general_reasoning(prompt: str, socket: WebSocket, event_data: str="", 
         async for chunk in response_stream:
             chunk_text = chunk.text
             await socket.send_text(chunk_text)
-        return
+            full_response += chunk_text
+        return full_response
     except Exception as e:
         return f"Error in safety check: {str(e)}"
 
